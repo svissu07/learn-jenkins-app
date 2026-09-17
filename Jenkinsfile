@@ -2,9 +2,22 @@ pipeline {
     agent any
 
     stages {
-        stage('Hello') {
+        stage('Build') {
             steps {
-                echo 'Hello World'
+                echo 'Hello World from build stage'
+            }
+        }
+        stage('Test') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                echo 'Hello World from Test'
+                sh 'test -f build/index.html'
+                sh ' npm test'
             }
         }
     }
